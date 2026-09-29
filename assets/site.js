@@ -111,7 +111,7 @@
     var d = parseInt(dia.value, 10);
     var fmt = v.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
     salida.textContent = 'Lo que cobres el ' + DIAS[d] + ' (' + fmt +
-      ') se abona, en los planes con liquidación rápida, el ' + DIAS[siguienteHabil(d)] + '.';
+      ') llega a tu cuenta el ' + DIAS[siguienteHabil(d)] + '.';
   }
   importe.addEventListener('input', pintar);
   dia.addEventListener('change', pintar);

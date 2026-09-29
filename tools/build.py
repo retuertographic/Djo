@@ -103,7 +103,7 @@ def logo(claro=False):
 # ---------------------------------------------------------------------------
 NAV = [
     ("index.html", "Inicio"),
-    ("terminales.html", "Terminales"),
+    ("terminales.html", "Datáfonos"),
     ("soluciones.html", "Soluciones"),
     ("sectores.html", "Sectores"),
     ("tarifas.html", "Tarifas"),
@@ -125,7 +125,7 @@ def cabecera(activo):
   </div>
   <div class="tb-items">
     <span>{ico("reloj")}{C["horario"]}</span>
-    <span>{ico("rayo")}Alta en 24-48 h</span>
+    <span>{ico("rayo")}Entrega en 24-48 h</span>
   </div>
 </div></div>
 
@@ -151,12 +151,14 @@ def pie():
         f'<li><a href="{h}">{ico(i)}<span>{t}</span></a></li>' for h, i, t in lista
     )
     producto = [
-        ("terminales.html", "terminal", "Terminales de pago"),
-        ("terminales.html#app", "movil", "Cobro con el móvil"),
-        ("soluciones.html#online", "web", "Pagos online y enlaces"),
-        ("soluciones.html#mesa", "mesa", "Pago en mesa"),
-        ("soluciones.html#reservas", "calendario", "Reservas y lista de espera"),
-        ("soluciones.html#informes", "grafica", "App de gestión e informes"),
+        ("terminales.html#go", "terminal", "Kairo Go"),
+        ("terminales.html#pocket", "movil", "Kairo Pocket"),
+        ("terminales.html#duo", "impresora", "Kairo Duo"),
+        ("soluciones.html#reservas", "calendario", "Reservas y colas virtuales"),
+        ("soluciones.html#enlaces", "enlace", "Enlaces de pago"),
+        ("soluciones.html#integracion", "enlace", "Integración con tu TPV"),
+        ("soluciones.html#app", "grafica", "App de gestión"),
+        ("soluciones.html#verifactu", "escudo", "VeriFactu"),
         ("tarifas.html", "euro", "Tarifas"),
     ]
     info = [
@@ -173,7 +175,7 @@ def pie():
   <div class="foot-grid">
     <div>
       <a class="foot-brand" href="index.html">{logo(claro=True)}</a>
-      <p>Distribuidor autorizado de soluciones de cobro con tarjeta para comercios, hostelería y autónomos. Te asesoramos, tramitamos el alta y te acompañamos después.</p>
+      <p>Distribuidor de datáfonos, TPV y soluciones de cobro para hostelería, comercio, autónomos y pymes. Te asesoramos, tramitamos el alta y te acompañamos después.</p>
       <ul class="foot-links">
         <li><a href="contacto.html">{ico("pin")}<span>{C["direccion"]}</span></a></li>
         <li><a href="tel:{C["telefono_intl"]}">{ico("tel")}<span>{C["telefono"]}</span></a></li>
@@ -309,34 +311,36 @@ def inicio():
     cuerpo = f'''
 <div class="hero"><div class="wrap hero-grid">
   <div>
-    <span class="eyebrow">Terminales de pago · TPV para negocios</span>
-    <h1>Cobra con tarjeta en segundos y ten tu dinero al día siguiente</h1>
-    <p class="lead">Terminales rápidos, conectados por 4G y wifi, con una app para ver tus ventas al momento. Te ayudamos a elegir el equipo, tramitamos el alta y te lo dejamos funcionando.</p>
+    <span class="eyebrow">Datáfonos y TPV para negocios</span>
+    <h1>Cobros rápidos, dinero al día siguiente y todo tu negocio en una app</h1>
+    <p class="lead">Datáfonos que procesan el pago en segundos y pasan solos del wifi al 4G, un TPV todo en uno preparado para VeriFactu, reservas, enlaces de pago y una app con tus ventas en tiempo real. Te asesoramos, tramitamos el alta y te lo dejamos funcionando.</p>
     <div class="actions">
-      <a class="btn btn-primary" href="contacto.html">{ico("terminal")}Pide tu terminal</a>
-      <a class="btn btn-line" href="tarifas.html">{ico("euro")}Ver tarifas</a>
+      <a class="btn btn-primary" href="contacto.html">{ico("terminal")}Pide tu propuesta</a>
+      <a class="btn btn-line" href="terminales.html">{ico("flecha")}Ver datáfonos</a>
     </div>
     <span class="respaldo">{C["lema"]}</span>
   </div>
   <div class="hero-device">{dibujo_terminal()}<span class="burbuja">{ico("check")}Pago aceptado</span></div>
 </div>
 <div class="wrap"><div class="hero-stats">
-    <div><b>Siguiente día hábil</b><span>liquidación de tus ventas en los planes con abono rápido</span></div>
-    <div><b>4G + wifi</b><span>el terminal sigue cobrando aunque falle la conexión del local</span></div>
-    <div><b>Todas las tarjetas</b><span>débito, crédito, sin contacto y monederos del móvil</span></div>
-    <div><b>Soporte en español</b><span>te atiende una persona, no un contestador</span></div>
+    <div><b>Día hábil siguiente</b><span>recibes el dinero de tus ventas de lunes a viernes</span></div>
+    <div><b>Wifi + 4G</b><span>si se cae el wifi, el datáfono sigue cobrando por 4G</span></div>
+    <div><b>10 h de batería</b><span>en el datáfono portátil, para toda la jornada</span></div>
+    <div><b>Entrega 24-48 h</b><span>24 h en las principales ciudades y 48 h en el resto</span></div>
 </div></div></div>
 
 <section><div class="wrap">
   <div class="section-head">
-    <h2>Todo lo que necesitas para cobrar</h2>
-    <p>En el mostrador, en la mesa, a domicilio o por internet: una sola plataforma y un único panel para ver todos tus cobros.</p>
+    <h2>Todo lo que necesitas para cobrar y gestionar tu negocio</h2>
+    <p>En la barra, en la mesa, en la terraza o a distancia: una sola plataforma y un único panel para ver todos tus cobros.</p>
   </div>
-  <div class="grid g4">
-    {tarjeta("terminal", "Terminales de pago", "Portátil, de mostrador con impresora o compacto de bolsillo. Pantalla táctil y batería para toda la jornada.", "terminales.html", "Ver terminales")}
-    {tarjeta("movil", "Cobro con el móvil", "Convierte tu smartphone en un datáfono: el cliente acerca la tarjeta y listo. Ideal para empezar o para cobrar fuera.", "terminales.html#app", "Cómo funciona")}
-    {tarjeta("web", "Pagos online", "Enlaces de pago por WhatsApp o correo, cobro de señales y pasarela para tu tienda web.", "soluciones.html#online", "Ver pagos online")}
-    {tarjeta("mesa", "Pago en mesa y reservas", "Divide la cuenta, añade propina y gestiona reservas y lista de espera desde la misma app.", "soluciones.html#mesa", "Ver soluciones")}
+  <div class="grid g3 g3-fijo">
+    {tarjeta("terminal", "Kairo Go", "Nuestro datáfono más rápido: 4G integrado, 10 horas de batería, propinas en pantalla, cuenta dividida y devoluciones ágiles.", "terminales.html#go", "Ver Kairo Go")}
+    {tarjeta("movil", "Kairo Pocket", "Datáfono de bolsillo para anotar pedidos y cobrar en la mesa. Contactless y monederos móviles.", "terminales.html#pocket", "Ver Kairo Pocket")}
+    {tarjeta("impresora", "Kairo Duo", "TPV y datáfono todo en uno: toma de pedidos, cobro, impresión de tiques y cierre de caja. Preparado para VeriFactu.", "terminales.html#duo", "Ver Kairo Duo")}
+    {tarjeta("calendario", "Reservas y colas virtuales", "Acepta reservas online, abre una cola virtual o ambas cosas. Menos mesas vacías y menos esperas.", "soluciones.html#reservas", "Ver reservas")}
+    {tarjeta("enlace", "Enlaces de pago", "Crea un enlace en unos clics, envíalo al cliente y cobra a distancia en una página de pago segura.", "soluciones.html#enlaces", "Ver enlaces de pago")}
+    {tarjeta("grafica", "App de gestión", "Ventas, rechazos y devoluciones en tiempo real, avisos de transferencia diarios y todas tus facturas.", "soluciones.html#app", "Ver la app")}
   </div>
 </div></section>
 
@@ -344,8 +348,8 @@ def inicio():
   <div class="grid g2" style="align-items:center;gap:44px">
     <div>
       <span class="eyebrow-dark">Tu dinero, cuando lo necesitas</span>
-      <h2>Liquidación rápida para que la caja no se quede esperando</h2>
-      <p style="color:var(--muted)">Con los planes de abono rápido, lo que cobras hoy llega a tu cuenta el siguiente día hábil. Sin esperar a fin de semana ni a cierres mensuales.</p>
+      <h2>Lo que cobras hoy, en tu cuenta el siguiente día hábil</h2>
+      <p style="color:var(--muted)">Si cobras de lunes a viernes, recibes el dinero el siguiente día hábil, sin contar fines de semana ni festivos. Y la app te avisa de cada transferencia.</p>
       <div class="calc" id="calcLiq">
         <div class="row2">
           <div class="field"><label for="imp">Ventas con tarjeta del día (€)</label><input id="imp" name="importe" inputmode="decimal" value="850"></div>
@@ -354,149 +358,165 @@ def inicio():
           </div>
         </div>
         <p class="calc-out" data-salida aria-live="polite"></p>
-        <p class="note-inline">Cálculo orientativo. Los plazos exactos dependen del plan y del banco receptor, y se detallan en tu contrato.</p>
+        <p class="note-inline">Cálculo orientativo; no tiene en cuenta los festivos. Los plazos exactos figuran en tu contrato.</p>
       </div>
     </div>
     {checks([
-        ("Sin sorpresas en la factura", "Te explicamos la tarifa por escrito antes de firmar: comisión por operación y cuota, si la hay."),
-        ("Conexión que no se cae", "El terminal usa 4G y wifi y cambia de una a otra solo, para que no pierdas ninguna venta."),
-        ("Ventas al momento", "Consulta en la app lo que has cobrado, por terminal, por empleado y por franja horaria."),
-        ("Todo desde un solo panel", "Terminales, cobros online y reservas en el mismo sitio, con un único informe."),
+        ("Pagos en segundos", "El datáfono procesa cada cobro en un instante, para que la cola no crezca en hora punta."),
+        ("Nunca pierdas un cobro", "4G integrado que entra en marcha si el wifi del local se cae."),
+        ("Propinas en pantalla", "Una pantalla opcional antes del pago anima al cliente a dejar propina."),
+        ("Todas las tarjetas y monederos", "Visa, Mastercard, Maestro y Discover, contactless y pagos con el móvil o el reloj."),
     ])}
   </div>
 </div></section>
 
 <section><div class="wrap">
-  <div class="section-head">
-    <h2>Pensado para tu tipo de negocio</h2>
-    <p>Configuramos el terminal y la app según cómo trabajas: no cobra igual una terraza que una peluquería.</p>
-  </div>
-  <div class="grid g3 g3-fijo">
-    {tarjeta("cubiertos", "Restaurantes y cafeterías", "Pago en mesa, cuenta dividida, propinas y reservas. Menos colas en la barra y mesas que rotan antes.", "sectores.html#restauracion", "Ver solución")}
-    {tarjeta("copa", "Bares y ocio nocturno", "Cobros rápidos en barra, varios terminales conectados y control de caja por turno.", "sectores.html#bares", "Ver solución")}
-    {tarjeta("bolsa", "Comercio y tiendas", "Terminal de mostrador con impresora, devoluciones sencillas y ventas online con enlace de pago.", "sectores.html#comercio", "Ver solución")}
-    {tarjeta("tijeras", "Peluquerías y estética", "Señales para reservar cita, cobro en el sillón y control de propinas por profesional.", "sectores.html#belleza", "Ver solución")}
-    {tarjeta("maletin", "Autónomos y servicios", "Cobra a domicilio con un terminal de bolsillo o con tu móvil, y envía la factura al momento.", "sectores.html#servicios", "Ver solución")}
-    {tarjeta("cama", "Alojamientos", "Preautorizaciones, cobros a distancia y terminal en recepción conectado a tu sistema.", "sectores.html#alojamiento", "Ver solución")}
+  <div class="grid g2" style="align-items:center;gap:44px">
+    <div class="ficha-img">{dibujo_terminal("mostrador", "36,80")}</div>
+    <div>
+      <span class="eyebrow-dark">Novedad · VeriFactu</span>
+      <h2>Kairo Duo: el TPV y el datáfono en un solo equipo</h2>
+      <p class="entradilla">Toma pedidos, cobra, imprime el tique en segundos con la impresora de alta velocidad y cierra caja sin cambiar de aparato.</p>
+      {checks([
+          ("Preparado para VeriFactu", "Cada venta genera automáticamente un registro seguro con identificador único que se envía a la Agencia Tributaria. La obligación entra en vigor el 1 de enero de 2027."),
+          ("Menos aparatos en el mostrador", "Pedido, cobro, tique y cierre de caja en el mismo dispositivo."),
+      ])}
+      <div class="btn-par" style="margin-top:22px"><a class="btn btn-primary" href="contacto.html?interes=Kairo%20Duo">{ico("mail")}Me interesa</a><a class="btn btn-ghost" href="terminales.html#duo">Ver ficha</a></div>
+    </div>
   </div>
 </div></section>
 
 <section class="alt"><div class="wrap">
   <div class="section-head">
+    <h2>Pensado para tu tipo de negocio</h2>
+    <p>Configuramos el datáfono y la app según cómo trabajas: no cobra igual una terraza que una peluquería.</p>
+  </div>
+  <div class="grid g3 g3-fijo">
+    {tarjeta("cubiertos", "Restaurantes y cafeterías", "Pago en mesa, cuenta dividida, propinas, reservas y colas virtuales para rotar más mesas.", "sectores.html#restauracion", "Ver solución")}
+    {tarjeta("copa", "Bares, ocio y chiringuitos", "Cobros en segundos en barra y terraza, 4G de respaldo y varios datáfonos a la vez.", "sectores.html#bares", "Ver solución")}
+    {tarjeta("bolsa", "Comercio y tiendas", "Datáfono integrado con tu TPV, devoluciones ágiles y enlaces de pago para ventas a distancia.", "sectores.html#comercio", "Ver solución")}
+    {tarjeta("tijeras", "Peluquerías y estética", "Señales con enlace de pago para confirmar citas y cobro con propina en el sillón.", "sectores.html#belleza", "Ver solución")}
+    {tarjeta("maletin", "Autónomos y pymes", "Datáfono portátil con 4G y enlaces de pago para cobrar donde estés.", "sectores.html#servicios", "Ver solución")}
+    {tarjeta("usuarios", "Eventos y ferias", "Datáfonos con 4G y batería de 10 horas para puestos sin enchufe ni wifi fiable.", "sectores.html#eventos", "Ver solución")}
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="section-head">
     <h2>Del primer contacto al primer cobro</h2>
-    <p>Nosotros nos ocupamos del papeleo. Tú solo tienes que enchufar el terminal.</p>
+    <p>Nosotros nos ocupamos del papeleo. Tú solo tienes que encender el datáfono.</p>
   </div>
   <ol class="pasos">
-    <li><span class="paso-n">1</span><h3>Nos cuentas tu negocio</h3><p>Volumen de ventas, tipo de local y cómo cobras hoy. Con eso te recomendamos terminal y tarifa.</p></li>
-    <li><span class="paso-n">2</span><h3>Te enviamos la propuesta</h3><p>Por escrito y sin letra pequeña. Si te encaja, preparamos el alta con tu documentación.</p></li>
-    <li><span class="paso-n">3</span><h3>Recibes el terminal</h3><p>Llega configurado. Te ayudamos a activarlo por teléfono o en persona.</p></li>
-    <li><span class="paso-n">4</span><h3>Empiezas a cobrar</h3><p>Y seguimos a tu lado para cambios de tarifa, más terminales o cualquier incidencia.</p></li>
+    <li><span class="paso-n">1</span><h3>Nos cuentas tu negocio</h3><p>Facturación con tarjeta, número de datáfonos y cómo cobras hoy. Con eso te preparamos la propuesta.</p></li>
+    <li><span class="paso-n">2</span><h3>Recibes tu propuesta</h3><p>Por escrito, con las comisiones según el tipo de tarjeta y el alquiler de cada datáfono.</p></li>
+    <li><span class="paso-n">3</span><h3>Te llega el datáfono</h3><p>En 24 horas en las principales ciudades y en 48 horas en el resto (envíos de lunes a viernes).</p></li>
+    <li><span class="paso-n">4</span><h3>Empiezas a cobrar</h3><p>Y seguimos a tu lado: asistencia técnica, resolución de problemas y sustitución del equipo.</p></li>
   </ol>
   <div style="margin-top:26px"><a class="btn btn-ghost" href="como-funciona.html">Ver el proceso completo {ico("flecha")}</a></div>
 </div></section>
 
-<section><div class="wrap">
+<section class="alt"><div class="wrap">
   <div class="section-head">
     <span class="eyebrow-dark">Ideas equivocadas</span>
     <h2>Lo que se suele creer sobre el datáfono y lo que de verdad ocurre</h2>
   </div>
   <div class="grid g3">
-    <div class="mito"><p class="mito-falso">«El datáfono del banco me sale gratis.»</p><p class="mito-real">Suele ir ligado a comisiones, cuotas o productos vinculados. Compara el coste total por operación, no solo el alquiler.</p></div>
-    <div class="mito"><p class="mito-falso">«Cobrar con tarjeta es más lento que en efectivo.»</p><p class="mito-real">Un pago sin contacto tarda un par de segundos y no hay que dar cambio ni cuadrar monedas al cierre.</p></div>
-    <div class="mito"><p class="mito-falso">«Cambiar de terminal es un lío.»</p><p class="mito-real">Tramitamos el alta con tu documentación y te dejamos el equipo funcionando. Tu cuenta bancaria no cambia.</p></div>
+    <div class="mito"><p class="mito-falso">«Cambiar de proveedor me costará la penalización.»</p><p class="mito-real">Según tu facturación, se puede reembolsar la penalización de tu proveedor actual. Te lo detallamos en la propuesta.</p></div>
+    <div class="mito"><p class="mito-falso">«Si se cae el wifi, no puedo cobrar.»</p><p class="mito-real">Con 4G integrado, el datáfono cambia de red solo y sigue cobrando.</p></div>
+    <div class="mito"><p class="mito-falso">«VeriFactu me obliga a cambiarlo todo.»</p><p class="mito-real">Con un TPV compatible, el registro de cada venta se genera y se envía solo. Kairo Duo ya viene preparado.</p></div>
   </div>
 </div></section>
 
 {panel_cta()}
 '''
-    pagina("index.html", "Inicio", "Terminales de pago con tarjeta, cobro con el móvil y pagos online para comercios, hostelería y autónomos. Liquidación rápida y soporte en español.", cuerpo)
+    pagina("index.html", "Inicio", "Datáfonos rápidos con 4G, TPV todo en uno preparado para VeriFactu, reservas, enlaces de pago y app en tiempo real. Dinero al siguiente día hábil.", cuerpo)
 
 
 TERMINALES = [
-    ("portatil", "Kairo Portátil", "El terminal para llevar a la mesa o a la terraza.",
-     [("Pantalla táctil grande", "Fácil de leer para el cliente, también a pleno sol."),
-      ("4G y wifi", "Cambia de red sola si una falla."),
-      ("Batería para toda la jornada", "Con base de carga incluida."),
-      ("Propinas y cuenta dividida", "El cliente elige la propina en la pantalla.")]),
-    ("mostrador", "Kairo Mostrador", "Con impresora de tiques integrada, para la caja fija.",
-     [("Impresora integrada", "Tique para el cliente y copia para el comercio."),
-      ("Conexión por cable, wifi o 4G", "Para cajas con mucho movimiento."),
-      ("Integrable con tu TPV", "Envía el importe desde el programa de caja y evita errores al teclear."),
-      ("Devoluciones en un paso", "Desde el propio terminal o desde la app.")]),
-    ("movil", "Kairo Tap (app)", "Tu móvil Android o iPhone compatible, convertido en datáfono.",
-     [("Sin equipo adicional", "Descarga la app y empieza a cobrar."),
-      ("Pagos sin contacto", "Tarjetas y monederos del móvil."),
-      ("Recibo digital", "Por correo o SMS al cliente."),
-      ("Perfecto para empezar", "O como segundo terminal para cobrar fuera.")]),
+    ("go", "portatil", "Kairo Go", "Datáfono", "Nuestro datáfono más rápido, que se mueve con tu negocio.",
+     [("Pagos ultrarrápidos", "El cobro se procesa en segundos."),
+      ("4G integrado", "Si el wifi se cae, pasa al 4G y nunca pierdes un cobro."),
+      ("10 horas de batería", "Para toda la jornada, de la barra a la terraza."),
+      ("Propinas, cuenta dividida y devoluciones", "Pantalla opcional de propina antes del pago y devoluciones en un momento.")]),
+    ("pocket", "movil", "Kairo Pocket", "Datáfono portátil", "Anota pedidos y cobra desde el mismo dispositivo, en la mesa.",
+     [("Pedido y cobro en uno", "Toma la comanda en la mesa y cóbrala sin volver a la barra."),
+      ("Contactless y monederos", "Las principales tarjetas sin contacto, Apple Pay y Google Pay."),
+      ("Wifi o 4G automático", "Se conecta solo a la red disponible."),
+      ("Cabe en el bolsillo", "Ligero y siempre a mano en hora punta.")]),
+    ("duo", "mostrador", "Kairo Duo", "TPV + datáfono", "El TPV y el datáfono en un solo equipo, preparado para VeriFactu.",
+     [("Todo en uno", "Toma de pedidos, cobro, impresión de tiques y cierre de caja."),
+      ("Impresora de alta velocidad", "Cobra e imprime el recibo en segundos."),
+      ("Listo para VeriFactu", "Registro seguro de cada venta con envío automático a la Agencia Tributaria."),
+      ("Menos equipos en el mostrador", "Un único dispositivo para toda la operativa diaria.")]),
 ]
 
 
 def terminales():
     fichas = ""
-    for i, (var, nombre, lema, feats) in enumerate(TERMINALES):
-        ancla = "app" if var == "movil" else var
+    for i, (ancla, var, nombre, tipo, lema, feats) in enumerate(TERMINALES):
         fichas += f'''
 <section class="{"alt" if i % 2 else ""}" id="{ancla}"><div class="wrap">
   <div class="ficha{" invertida" if i % 2 else ""}">
-    <div class="ficha-img">{dibujo_terminal(var, ["18,90", "62,35", "9,50"][i])}</div>
+    <div class="ficha-img">{dibujo_terminal(var, ["18,90", "42,00", "62,35"][i])}</div>
     <div>
-      <span class="eyebrow-dark">{"App" if var == "movil" else "Terminal"}</span>
+      <span class="eyebrow-dark">{tipo}</span>
       <h2>{nombre}</h2>
       <p class="entradilla">{lema}</p>
       {checks(feats)}
-      <div class="btn-par" style="margin-top:22px"><a class="btn btn-primary" href="contacto.html?interes={nombre}">{ico("mail")}Lo quiero</a><a class="btn btn-ghost" href="tarifas.html">Ver tarifas</a></div>
+      <div class="btn-par" style="margin-top:22px"><a class="btn btn-primary" href="contacto.html?interes={nombre.replace(" ", "%20")}">{ico("mail")}Lo quiero</a><a class="btn btn-ghost" href="tarifas.html">Ver tarifas</a></div>
     </div>
   </div>
 </div></section>'''
-    cuerpo = cabeza_pagina("Terminales", "Terminales de pago", "Elige el equipo según dónde cobras. Todos aceptan tarjetas de débito y crédito, pagos sin contacto y monederos del móvil, y se gestionan desde la misma app.") + fichas + f'''
+    cuerpo = cabeza_pagina("Datáfonos", "Datáfonos y TPV", "Elige el equipo según dónde cobras. Todos aceptan las principales tarjetas, pagos sin contacto y monederos móviles, y se gestionan desde la misma app.") + fichas + f'''
 <section><div class="wrap">
   <div class="section-head"><h2>Comparativa rápida</h2><p>¿Dudas entre dos modelos? Aquí tienes las diferencias principales.</p></div>
   <div class="tabla-wrap"><table class="comparativa">
-    <thead><tr><th></th><th>Portátil</th><th>Mostrador</th><th>Tap (app)</th></tr></thead>
+    <thead><tr><th></th><th>Kairo Go</th><th>Kairo Pocket</th><th>Kairo Duo</th></tr></thead>
     <tbody>
-      <tr><td>Lo mejor para</td><td>Mesa y terraza</td><td>Caja fija</td><td>Empezar o cobrar fuera</td></tr>
-      <tr><td>Conexión</td><td>4G + wifi</td><td>Cable, wifi, 4G</td><td>La del móvil</td></tr>
-      <tr><td>Impresora</td><td>Tique digital</td><td>{ico("check")} Integrada</td><td>Tique digital</td></tr>
-      <tr><td>Tarjeta con chip y PIN</td><td>{ico("check")}</td><td>{ico("check")}</td><td>Sin contacto</td></tr>
+      <tr><td>Lo mejor para</td><td>Barra, mesa y terraza</td><td>Tomar pedidos y cobrar en mesa</td><td>Mostrador y caja</td></tr>
+      <tr><td>Conexión</td><td>Wifi + 4G</td><td>Wifi + 4G</td><td>Wifi + 4G</td></tr>
+      <tr><td>Toma de pedidos</td><td>—</td><td>{ico("check")}</td><td>{ico("check")}</td></tr>
+      <tr><td>Impresora de tiques</td><td>—</td><td>—</td><td>{ico("check")} Alta velocidad</td></tr>
       <tr><td>Propinas y cuenta dividida</td><td>{ico("check")}</td><td>{ico("check")}</td><td>{ico("check")}</td></tr>
-      <tr><td>Integración con TPV</td><td>{ico("check")}</td><td>{ico("check")}</td><td>—</td></tr>
+      <tr><td>Preparado para VeriFactu</td><td>Con tu TPV compatible</td><td>Con tu TPV compatible</td><td>{ico("check")}</td></tr>
     </tbody>
   </table></div>
+  <p class="note-inline" style="margin-top:16px">¿Ya tienes TPV? Los datáfonos se integran con numerosos programas de punto de venta: el importe pasa del TPV al datáfono sin teclearlo. <a href="soluciones.html#integracion">Ver integración</a>.</p>
 </div></section>
-''' + panel_cta("¿No sabes cuál elegir?", "Te lo recomendamos nosotros según tu volumen de ventas y tu forma de trabajar. Muchos negocios combinan un terminal de mostrador con uno portátil.")
-    pagina("terminales.html", "Terminales de pago", "Terminal portátil, de mostrador con impresora y app para cobrar con el móvil. Tarjetas, pagos sin contacto y monederos móviles.", cuerpo)
+''' + panel_cta("¿No sabes cuál elegir?", "Te lo recomendamos según tu facturación y tu forma de trabajar. Muchos negocios combinan Kairo Duo en el mostrador con Kairo Pocket en la sala.")
+    pagina("terminales.html", "Datáfonos y TPV", "Kairo Go, el datáfono más rápido con 4G y 10 h de batería; Kairo Pocket para pedidos y cobro en mesa; y Kairo Duo, TPV y datáfono todo en uno preparado para VeriFactu.", cuerpo, activo="terminales.html")
 
 
 def soluciones():
     bloques = [
-        ("online", "web", "Pagos online y enlaces de pago", "Cobra sin que el cliente esté delante.",
-         [("Enlaces de pago", "Crea un enlace con el importe y envíalo por WhatsApp, SMS o correo."),
-          ("Señales y depósitos", "Asegura reservas y encargos cobrando una parte por adelantado."),
-          ("Pasarela para tu web", "Integra el cobro en tu tienda online."),
-          ("Pagos por teléfono", "Introduce los datos de la tarjeta de forma segura desde el panel.")]),
-        ("mesa", "mesa", "Pago en mesa", "El cliente paga sin levantarse y sin esperar a que le traigan la cuenta.",
-         [("Cuenta dividida", "A partes iguales o por productos, en el propio terminal."),
-          ("Propinas en pantalla", "Porcentajes sugeridos o importe libre, con informe por empleado."),
-          ("Pago con QR", "El cliente escanea el tique y paga desde su móvil."),
-          ("Mesas que rotan antes", "Menos tiempo entre el postre y la siguiente reserva.")]),
-        ("reservas", "calendario", "Reservas y lista de espera", "Llena el local sin depender del teléfono.",
-         [("Reservas online", "Un enlace para tu web, redes y buscadores."),
-          ("Lista de espera digital", "Avisa por SMS cuando la mesa está lista."),
-          ("Menos plantones", "Pide tarjeta o señal para confirmar la reserva."),
-          ("Plano de sala", "Ve de un vistazo qué mesas están libres.")]),
-        ("informes", "grafica", "App de gestión e informes", "Tu negocio en el bolsillo.",
-         [("Ventas en tiempo real", "Por terminal, por empleado y por hora."),
-          ("Cierre de caja", "Informe diario listo para tu gestoría."),
-          ("Varios locales", "Todos tus establecimientos en un solo panel."),
-          ("Usuarios y permisos", "Decide quién puede hacer devoluciones o ver informes.")]),
-        ("cuenta", "banco", "Cuenta de negocio y tarjeta", "Opcional: recibe tus ventas en una cuenta pensada para el negocio.",
-         [("Abono de ventas", "Consulta el saldo en la misma app que tus cobros."),
-          ("Tarjeta de empresa", "Para compras y pagos a proveedores."),
-          ("Control de gastos", "Movimientos categorizados automáticamente."),
-          ("Compatible con tu banco", "Si prefieres, sigues recibiendo los abonos en tu cuenta actual.")]),
+        ("reservas", "calendario", "Reservas y colas virtuales", "Atrae, acomoda y sirve a tus clientes más fácilmente.",
+         [("Reservas, cola virtual o ambas", "Tú eliges cómo recibir a tus clientes."),
+          ("Menos esperas", "El cliente se apunta a la cola desde su móvil y le avisamos cuando su mesa está lista."),
+          ("Mejor asignación de mesas", "Reduce las mesas ociosas y aprovecha al máximo el aforo."),
+          ("Del cliente sin cita a la reserva online", "Todo gestionado desde el mismo sitio.")]),
+        ("enlaces", "enlace", "Enlaces de pago", "Comparte enlaces únicos y cobra al instante, sin datáfono.",
+         [("En unos clics", "Crea el enlace, envíalo y el cliente paga en una página segura."),
+          ("Menos cancelaciones", "Confirma reservas de grupo, menús especiales o eventos con un pago por adelantado."),
+          ("Por WhatsApp, SMS o correo", "Por el canal que prefiera tu cliente."),
+          ("Cobro a distancia", "Encargos, presupuestos y servicios sin el cliente delante.")]),
+        ("integracion", "enlace", "Integración con tu TPV", "Conecta el datáfono y el TPV y olvídate de teclear importes.",
+         [("El importe pasa solo", "Del programa de caja al datáfono, sin errores."),
+          ("Compatible con numerosos TPV", "Consúltanos el tuyo y te decimos cómo conectarlo."),
+          ("Cierre de caja cuadrado", "Ventas y cobros coinciden al final del día."),
+          ("Cobros más rápidos", "Menos pasos para el equipo en hora punta.")]),
+        ("app", "grafica", "App de gestión", "Información de tu negocio en tiempo real, en el móvil y en el navegador.",
+         [("Ventas en tiempo real", "Controla ventas, rechazos y devoluciones según se producen."),
+          ("Avisos de transferencia", "Te avisamos cada día del dinero que llega a tu cuenta."),
+          ("Todas tus facturas", "En un solo lugar, con el desglose completo de los cargos."),
+          ("Cumplimiento PCI", "Informa del cumplimiento de la normativa de seguridad de tarjetas de forma sencilla.")]),
+        ("verifactu", "escudo", "Preparado para VeriFactu", "La nueva normativa de facturación, sin complicaciones.",
+         [("Registro automático", "Cada venta genera un registro seguro y estandarizado."),
+          ("Identificador único", "Se envía automáticamente a la Agencia Tributaria."),
+          ("Obligatorio desde el 1 de enero de 2027", "Adáptate con tiempo."),
+          ("Con Kairo Duo o tu TPV compatible", "Te asesoramos sobre la opción que más te conviene.")]),
     ]
-    html = cabeza_pagina("Soluciones", "Soluciones de cobro", "Más allá del datáfono: cobros online, pago en mesa, reservas y una app para controlar todo tu negocio desde el móvil.")
-    html += '<section><div class="wrap"><div class="grid g4">' + "".join(
+    html = cabeza_pagina("Soluciones", "Soluciones de cobro y gestión", "Más allá del datáfono: reservas y colas virtuales, enlaces de pago, integración con tu TPV, una app en tiempo real y adaptación a VeriFactu.")
+    html += '<section><div class="wrap"><div class="grid g3 g3-fijo">' + "".join(
         tarjeta(i, t, s, "#" + a, "Ver detalle") for a, i, t, s, _ in bloques) + "</div></div></section>"
     for n, (a, i, t, s, f) in enumerate(bloques):
         html += f'''
@@ -508,82 +528,76 @@ def soluciones():
   </div>
 </div></section>'''
     html += panel_cta()
-    pagina("soluciones.html", "Soluciones", "Pagos online, enlaces de pago, pago en mesa, reservas, informes de ventas y cuenta de negocio en una sola plataforma.", html)
+    pagina("soluciones.html", "Soluciones", "Reservas y colas virtuales, enlaces de pago, integración con TPV, app de gestión en tiempo real y adaptación a VeriFactu.", html)
 
 
 def sectores():
     s = [
         ("restauracion", "cubiertos", "Restaurantes y cafeterías",
-         "En hora punta cada minuto cuenta. Lleva el terminal a la mesa, divide la cuenta y deja que el cliente elija la propina.",
-         ["Pago en mesa y con QR", "Cuenta dividida y propinas", "Reservas y lista de espera", "Integración con tu TPV de hostelería"]),
-        ("bares", "copa", "Bares y ocio nocturno",
-         "Barra llena y poco tiempo: pagos sin contacto en dos segundos y varios terminales trabajando a la vez.",
-         ["Cobro sin contacto ultrarrápido", "Varios terminales por local", "Cierre de caja por turno", "Conexión 4G de respaldo"]),
+         "Anota el pedido y cóbralo en la mesa, divide la cuenta y deja que el cliente elija la propina. Con reservas y cola virtual, rotas más mesas.",
+         ["Kairo Pocket para pedido y cobro en mesa", "Cuenta dividida y propinas en pantalla", "Reservas y colas virtuales", "Integración con tu TPV de hostelería"]),
+        ("bares", "copa", "Bares, ocio y chiringuitos",
+         "Barra llena y poco tiempo: cobros en segundos y 4G de respaldo para la terraza o la playa.",
+         ["Kairo Go, el datáfono más rápido", "Wifi + 4G automático", "10 horas de batería", "Varios datáfonos por local"]),
         ("comercio", "bolsa", "Comercio y tiendas",
-         "Terminal de mostrador con impresora y, si vendes online, enlaces de pago y pasarela para tu web.",
-         ["Impresora de tiques integrada", "Devoluciones sencillas", "Venta online y por WhatsApp", "Informes por producto y hora"]),
+         "Kairo Duo en el mostrador para vender, cobrar e imprimir el tique, o tu TPV actual integrado con el datáfono.",
+         ["TPV y datáfono en uno", "Impresora de alta velocidad", "Devoluciones ágiles", "Enlaces de pago para ventas a distancia"]),
         ("belleza", "tijeras", "Peluquerías, estética y bienestar",
-         "Pide una señal al reservar para reducir las ausencias y cobra en el sillón sin que el cliente vaya al mostrador.",
-         ["Señal al reservar cita", "Propinas por profesional", "Cobro en cabina o sillón", "Bonos y pagos a plazos por enlace"]),
-        ("servicios", "maletin", "Autónomos y servicios a domicilio",
-         "Fontaneros, técnicos, fisioterapeutas o transportistas: cobra donde estés con un terminal de bolsillo o con tu móvil.",
-         ["Terminal de bolsillo o app", "Enlace de pago para presupuestos", "Recibo por correo o SMS", "Sin permanencia en los planes flexibles"]),
-        ("alojamiento", "cama", "Hoteles y alojamientos",
-         "Preautoriza la tarjeta al hacer el check-in, cobra a distancia y ten un terminal en recepción conectado a tu sistema.",
-         ["Preautorizaciones", "Cobro de reservas a distancia", "Terminal en recepción", "Varias monedas en tarjetas extranjeras"]),
+         "Confirma citas con un pago por adelantado y cobra en el sillón sin que el cliente pase por el mostrador.",
+         ["Enlaces de pago para señales", "Propinas en pantalla", "Cobro contactless y con el móvil", "Ventas y facturas en la app"]),
+        ("servicios", "maletin", "Autónomos y pymes",
+         "Cobra en el local, a domicilio o a distancia, y controla todo desde el móvil.",
+         ["Datáfono portátil con 4G", "Enlaces de pago", "Dinero al siguiente día hábil", "Facturas con el desglose de cargos"]),
+        ("eventos", "usuarios", "Eventos y ferias",
+         "Puestos sin enchufe ni wifi fiable: datáfonos con 4G integrado y batería para toda la jornada.",
+         ["4G integrado", "10 horas de batería", "Cobros en segundos", "Ventas de cada puesto en tiempo real"]),
     ]
-    html = cabeza_pagina("Sectores", "Soluciones por sector", "Cada negocio cobra de una forma. Configuramos terminal, app y tarifa según tu actividad.")
+    html = cabeza_pagina("Sectores", "Soluciones por sector", "Cada negocio cobra de una forma. Configuramos datáfono, app y tarifa según tu actividad.")
     html += '<section><div class="wrap"><div class="grid g2 sectores">'
     for a, i, t, txt, pts in s:
         html += f'''<article class="card sector" id="{a}"><span class="ico">{ico(i)}</span><h3>{t}</h3><p>{txt}</p>
 <ul class="mini-checks">{"".join(f"<li>{ico('check')}{p}</li>" for p in pts)}</ul>
 <a class="more" href="contacto.html">Pedir propuesta para mi negocio {ico("flecha")}</a></article>'''
     html += "</div></div></section>" + panel_cta("¿Tu sector no aparece?", "Trabajamos con todo tipo de actividades. Cuéntanos cómo cobras hoy y te decimos qué te conviene.")
-    pagina("sectores.html", "Sectores", "Terminales de pago para restaurantes, bares, comercios, peluquerías, autónomos y alojamientos.", html)
+    pagina("sectores.html", "Sectores", "Datáfonos y TPV para restaurantes, bares, chiringuitos, comercios, peluquerías, autónomos, pymes, eventos y ferias.", html)
 
 
 def tarifas():
-    planes = [
-        ("Flexible", "Para empezar o con ventas variables.", "Sin cuota mensual",
-         ["Comisión fija por operación", "App de cobro con el móvil", "Enlaces de pago", "Sin permanencia"], False),
-        ("Negocio", "Para comercios y hostelería con ventas regulares.", "Cuota mensual + comisión reducida",
-         ["Terminal portátil o de mostrador", "Liquidación rápida", "Pago en mesa, propinas y cuenta dividida", "Informes y cierre de caja"], True),
-        ("A medida", "Para volúmenes altos o varios locales.", "Tarifa personalizada",
-         ["Comisión negociada según volumen", "Varios terminales y locales", "Integración con tu TPV", "Gestor personal"], False),
-    ]
-    html = cabeza_pagina("Tarifas", "Tarifas claras", "Tres formas de trabajar según tu volumen. Te enviamos la propuesta con los importes exactos por escrito antes de firmar nada.")
-    html += '<section><div class="wrap"><div class="grid g3 planes">'
-    for n, sub, precio, f, dest in planes:
-        html += f'''<div class="card plan{" destacado" if dest else ""}">{'<span class="plan-tag">El más elegido</span>' if dest else ""}
-<h3>{n}</h3><p>{sub}</p><div class="plan-precio">{precio}</div>
-<ul class="mini-checks">{"".join(f"<li>{ico('check')}{x}</li>" for x in f)}</ul>
-<a class="btn {"btn-primary" if dest else "btn-ghost"}" href="contacto.html">Pedir precio</a></div>'''
-    html += f'''</div>
-<p class="note-inline" style="margin-top:22px">Las comisiones dependen del tipo de tarjeta, del volumen mensual y de la actividad. Por eso no publicamos una cifra única: te damos la tuya, por escrito y sin compromiso.</p>
+    html = cabeza_pagina("Tarifas", "Precios a medida de tu negocio", "No hay una tarifa única: tu precio depende de cuánto facturas con tarjeta, del tipo de tarjeta y del número de datáfonos. Te lo damos por escrito y sin compromiso.")
+    html += f'''<section><div class="wrap">
+  <div class="section-head"><h2>¿De qué depende tu precio?</h2><p>Tres factores definen tu propuesta personalizada.</p></div>
+  <div class="grid g3 g3-fijo">
+    {tarjeta("euro", "Tu facturación con tarjeta", "Cuanto más cobras al año con tarjeta, mejores condiciones podemos ofrecerte.")}
+    {tarjeta("tarjeta", "El tipo de tarjeta", "Débito o crédito, personal o de empresa, emitida dentro o fuera del Espacio Económico Europeo, y la red (Visa, Mastercard, Maestro o Discover). También cuenta si el pago es presencial o a distancia.")}
+    {tarjeta("terminal", "Tus datáfonos", "El alquiler se paga por cada datáfono e incluye la conexión 4G, la asistencia técnica, la resolución de problemas y la sustitución del equipo.")}
+  </div>
 </div></section>
 <section class="alt"><div class="wrap">
   <div class="grid g2" style="align-items:start;gap:44px">
-    <div><h2>¿Qué incluye siempre?</h2><p class="entradilla">Sea cual sea el plan, tienes lo esencial para cobrar con tranquilidad.</p></div>
+    <div><h2>Condiciones claras</h2><p class="entradilla">Lo que conviene saber antes de firmar. Te lo detallamos todo en la propuesta.</p>
+    <a class="btn btn-primary" href="contacto.html">{ico("mail")}Pedir mi propuesta</a></div>
     {checks([
-        ("Todas las tarjetas", "Débito, crédito, empresa y extranjeras, además de monederos del móvil."),
-        ("Seguridad en cada pago", "Cifrado de extremo a extremo y cumplimiento de la normativa PCI DSS."),
-        ("Soporte en español", "Por teléfono, correo y WhatsApp."),
-        ("Asesoramiento continuo", "Revisamos tu tarifa si cambia tu volumen de ventas."),
+        ("Pago mínimo mensual de 24,95 €", "Solo se cobra si el total de comisiones del mes no llega a esa cantidad."),
+        ("Contrato de 12 meses", "Puedes rescindirlo en cualquier momento; en ese caso se aplican gastos de cancelación."),
+        ("Te ayudamos con la penalización de tu proveedor actual", "Reembolso de hasta 500 € si facturas con tarjeta menos de 150.000 € al año, y de hasta 3.000 € si facturas más."),
+        ("Dinero al siguiente día hábil", "Si cobras de lunes a viernes, sin contar fines de semana ni festivos."),
+        ("Facturas con todo el desglose", "Consulta cada cargo en la app."),
     ])}
   </div>
+  <p class="note-inline" style="margin-top:24px">Importes y condiciones según las tarifas vigentes del proveedor del servicio de pago en el momento de publicar esta página; pueden cambiar. Las condiciones que te aplican son las de tu propuesta y tu contrato.</p>
 </div></section>
-''' + panel_cta("Pide tu tarifa personalizada", "Envíanos una factura de tu datáfono actual y te decimos cuánto podrías ahorrar.")
-    pagina("tarifas.html", "Tarifas", "Planes de cobro con tarjeta sin cuota, con cuota y a medida. Propuesta por escrito y sin compromiso.", html)
+''' + panel_cta("Compara con lo que pagas hoy", "Envíanos una factura de tu datáfono actual y te decimos cuánto podrías ahorrar.")
+    pagina("tarifas.html", "Tarifas", "Precio personalizado según facturación con tarjeta, tipo de tarjeta y número de datáfonos. Mínimo mensual, contrato de 12 meses y reembolso de la penalización del proveedor anterior.", html)
 
 
 def como_funciona():
     pasos = [
-        ("Contacto", "Nos llamas, nos escribes por WhatsApp o rellenas el formulario. Te llamamos en menos de 24 horas laborables."),
-        ("Análisis", "Revisamos cómo cobras hoy y, si tienes datáfono, tu última factura para compararla."),
-        ("Propuesta", "Te enviamos por escrito el terminal recomendado y la tarifa, con todos los costes."),
-        ("Alta", "Nos pasas la documentación (DNI o CIF, IBAN y datos de la actividad) y tramitamos el contrato con la entidad de pago."),
-        ("Entrega", "Recibes el terminal configurado. Te ayudamos a activarlo y a hacer el primer cobro de prueba."),
-        ("Acompañamiento", "Seguimos contigo: nuevos terminales, cambios de plan, incidencias o dudas del día a día."),
+        ("Contacto", "Nos llamas, nos escribes por WhatsApp o rellenas el formulario. Te respondemos en menos de 24 horas laborables."),
+        ("Análisis", "Revisamos tu facturación con tarjeta, cuántos datáfonos necesitas y, si tienes proveedor, tu última factura para compararla."),
+        ("Propuesta", "Te enviamos por escrito el equipo recomendado y el precio personalizado, con todas las condiciones."),
+        ("Alta", "Nos pasas la documentación y tramitamos el contrato con la entidad de pago. Si cambias de proveedor, te ayudamos con el reembolso de la penalización."),
+        ("Entrega", "Recibes el datáfono en 24 horas en las principales ciudades y en 48 horas en el resto (envíos de lunes a viernes)."),
+        ("Acompañamiento", "Asistencia técnica, resolución de problemas y sustitución del datáfono si hace falta."),
     ]
     html = cabeza_pagina("Cómo funciona", "Cómo funciona", "Así es el proceso desde que nos contactas hasta que cobras tu primera venta con tarjeta.")
     html += '<section><div class="wrap"><ol class="pasos pasos-v">' + "".join(
@@ -594,31 +608,33 @@ def como_funciona():
 {checks([
     ("Identificación", "DNI o NIE del titular, o CIF y escrituras si es una sociedad."),
     ("Cuenta bancaria", "Certificado de titularidad de la cuenta donde recibirás los abonos."),
-    ("Actividad", "Descripción del negocio y dirección del local, si lo tienes."),
-    ("Volumen estimado", "Una idea de cuánto cobras al mes con tarjeta."),
+    ("Actividad", "Descripción del negocio y dirección del local."),
+    ("Facturación estimada", "Cuánto cobras al año con tarjeta y cuántos datáfonos necesitas."),
 ])}
 </div></div></section>''' + panel_cta()
-    pagina("como-funciona.html", "Cómo funciona", "Proceso de alta de un terminal de pago: contacto, propuesta, documentación, entrega y acompañamiento.", html)
+    pagina("como-funciona.html", "Cómo funciona", "Proceso de alta de un datáfono: contacto, propuesta personalizada, documentación, entrega en 24-48 h y asistencia.", html)
 
 
 PREGUNTAS = [
-    ("¿Qué tarjetas puedo aceptar?", "Tarjetas de débito y crédito de las principales redes internacionales, tarjetas de empresa y extranjeras, y pagos con el móvil o el reloj mediante los monederos digitales más habituales."),
-    ("¿Cuándo recibo el dinero de mis ventas?", "En los planes con liquidación rápida, el siguiente día hábil. En otros planes el plazo puede ser distinto; siempre te lo indicamos en la propuesta y en el contrato."),
-    ("¿Tengo que cambiar de banco?", "No. Puedes recibir los abonos en tu cuenta actual. La cuenta de negocio es opcional."),
-    ("¿Hay permanencia?", "Depende del plan. Los planes flexibles no tienen permanencia; en otros puede haber condiciones que te explicamos antes de firmar."),
-    ("¿Qué pasa si se cae el wifi del local?", "Los terminales portátiles y de mostrador tienen conexión 4G y cambian de red automáticamente para seguir cobrando."),
-    ("¿Puedo usarlo con mi programa de caja?", "Sí, el terminal de mostrador y el portátil se integran con muchos programas de TPV. Consúltanos el tuyo."),
-    ("¿Cuánto tarda el alta?", "Con la documentación completa, normalmente entre 24 y 48 horas laborables, más el envío del terminal."),
-    ("¿Qué pasa si el terminal se estropea?", "Te lo sustituimos. Mientras tanto puedes seguir cobrando con la app en el móvil o con enlaces de pago."),
-    ("¿Quién presta el servicio de pago?", f"{C['marca']} es un distribuidor comercial independiente. El servicio de pago lo presta una entidad de pago autorizada, que figura en tu contrato. Nosotros te asesoramos, tramitamos el alta y te damos soporte."),
-    ("¿Es seguro?", "Cada pago viaja cifrado y la plataforma cumple la normativa de seguridad de la industria de tarjetas (PCI DSS) y la autenticación reforzada exigida en Europa."),
+    ("¿Cuándo recibo el dinero de mis ventas?", "Si cobras de lunes a viernes, recibes el dinero el siguiente día hábil, sin contar fines de semana ni festivos. La app te avisa de cada transferencia."),
+    ("¿Cuánto cuesta?", "El precio depende de tu facturación anual con tarjeta, del tipo de tarjeta (débito o crédito, personal o de empresa) y del número de datáfonos. Te preparamos una propuesta personalizada sin compromiso."),
+    ("¿Hay un pago mínimo mensual?", "Sí, de 24,95 €, y solo se cobra si el total de comisiones del mes es inferior a esa cantidad."),
+    ("¿Qué incluye el alquiler del datáfono?", "Se paga por cada datáfono e incluye la conexión 4G, la asistencia técnica, la resolución de problemas y la sustitución del equipo."),
+    ("¿Cuánto dura el contrato?", "12 meses, aunque puedes rescindirlo en cualquier momento. En ese caso se aplican gastos de cancelación."),
+    ("Si cambio de proveedor, ¿quién paga la penalización?", "Se puede reembolsar hasta 500 € si facturas con tarjeta menos de 150.000 € al año, y hasta 3.000 € si facturas más."),
+    ("¿Cuánto tarda en llegar el datáfono?", "24 horas en las principales ciudades y 48 horas en el resto. Los envíos se hacen de lunes a viernes."),
+    ("¿Qué pasa si se cae el wifi?", "Los datáfonos tienen 4G integrado y cambian de red automáticamente, así que no pierdes ningún cobro."),
+    ("¿Qué tarjetas y métodos de pago acepto?", "Visa, Mastercard, Maestro y Discover, pagos sin contacto y monederos móviles como Apple Pay y Google Pay."),
+    ("¿Puedo conectarlo con mi TPV?", "Sí, los datáfonos se integran con numerosos programas de punto de venta. Si prefieres un único equipo, Kairo Duo reúne TPV y datáfono."),
+    ("¿Qué es VeriFactu y cómo me afecta?", "Es la normativa que obliga a registrar cada venta de forma segura y enviarla a la Agencia Tributaria. Entra en vigor el 1 de enero de 2027. Kairo Duo ya está preparado."),
+    ("¿Quién presta el servicio de pago?", f"{C['marca']} es un distribuidor comercial independiente. El servicio de pago lo presta la entidad de pago autorizada que figura en tu contrato. Nosotros te asesoramos, tramitamos el alta y te damos soporte."),
 ]
 
 
 def preguntas():
     html = cabeza_pagina("Preguntas frecuentes", "Preguntas frecuentes", "Las dudas que más nos plantean antes de dar el paso. Si la tuya no está aquí, escríbenos.")
     html += '<section><div class="wrap">' + faq(PREGUNTAS) + "</div></section>" + panel_cta("¿Te queda alguna duda?", "Llámanos o escríbenos por WhatsApp y te la resolvemos al momento.")
-    pagina("preguntas-frecuentes.html", "Preguntas frecuentes", "Respuestas sobre tarjetas aceptadas, plazos de abono, permanencia, conexión, alta y seguridad de los terminales de pago.", html)
+    pagina("preguntas-frecuentes.html", "Preguntas frecuentes", "Plazos de abono, precio, mínimo mensual, alquiler, contrato, penalización, entrega, 4G, tarjetas aceptadas, integración TPV y VeriFactu.", html)
 
 
 def contacto():
@@ -638,10 +654,10 @@ def contacto():
       <div class="field"><label for="email">Correo electrónico</label><input id="email" name="email" type="email" required></div>
     </div>
     <div class="row2">
-      <div class="field"><label for="sector">Sector</label><select id="sector" name="sector">{opciones(["Selecciona una opción", "Restaurante o cafetería", "Bar u ocio nocturno", "Comercio o tienda", "Peluquería o estética", "Autónomo o servicios", "Alojamiento", "Otro"])}</select></div>
-      <div class="field"><label for="interes">Me interesa</label><select id="interes" name="interes">{opciones(["Selecciona una opción", "Kairo Portátil", "Kairo Mostrador", "Kairo Tap (app)", "Pagos online", "Pago en mesa y reservas", "Comparar con mi datáfono actual"])}</select></div>
+      <div class="field"><label for="sector">Sector</label><select id="sector" name="sector">{opciones(["Selecciona una opción", "Restaurante o cafetería", "Bar, ocio o chiringuito", "Comercio o tienda", "Peluquería o estética", "Autónomo o pyme", "Eventos y ferias", "Otro"])}</select></div>
+      <div class="field"><label for="interes">Me interesa</label><select id="interes" name="interes">{opciones(["Selecciona una opción", "Kairo Go", "Kairo Pocket", "Kairo Duo", "Reservas y colas virtuales", "Enlaces de pago", "Integración con mi TPV", "Comparar con mi datáfono actual"])}</select></div>
     </div>
-    <div class="field"><label for="msg">Cuéntanos</label><textarea id="msg" name="mensaje" placeholder="Cuánto cobras al mes con tarjeta, cuántos terminales necesitas, qué tienes ahora…"></textarea></div>
+    <div class="field"><label for="msg">Cuéntanos</label><textarea id="msg" name="mensaje" placeholder="Cuánto facturas al año con tarjeta, cuántos datáfonos necesitas, qué tienes ahora…"></textarea></div>
     <label class="consent"><input type="checkbox" name="consent" required> <span>He leído y acepto la <a href="politica-de-privacidad.html">política de privacidad</a> y el tratamiento de mis datos para responder a esta solicitud.</span></label>
     <button class="btn btn-primary" type="submit">{ico("mail")}Enviar solicitud</button>
     <p class="form-msg" id="formMsg">Se abrirá tu programa de correo con la solicitud ya redactada. Si no ocurre nada, escríbenos a <a href="mailto:{C["email"]}">{C["email"]}</a>.</p>
