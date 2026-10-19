@@ -100,6 +100,7 @@
   var importe = caja.querySelector('[name=importe]');
   var dia = caja.querySelector('[name=dia]');
   var salida = caja.querySelector('[data-salida]');
+  var diario = caja.querySelector('[name=diario]');
   var DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
   function siguienteHabil(d) {
     var n = (d + 1) % 7;
@@ -109,26 +110,31 @@
   function pintar() {
     var v = parseFloat(String(importe.value).replace(',', '.')) || 0;
     var d = parseInt(dia.value, 10);
+    var llega = diario && diario.checked ? (d + 1) % 7 : siguienteHabil(d);
     var fmt = v.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
     salida.textContent = 'Lo que cobres el ' + DIAS[d] + ' (' + fmt +
-      ') llega a tu cuenta el ' + DIAS[siguienteHabil(d)] + '.';
+      ') llega a tu cuenta el ' + DIAS[llega] + '.' +
+      (diario && diario.checked ? ' Con el abono diario (+10 € al mes), también en fin de semana.' : '');
   }
   importe.addEventListener('input', pintar);
   dia.addEventListener('change', pintar);
+  if (diario) diario.addEventListener('change', pintar);
   pintar();
 })();
 
 // Simulador de tarifas: tramo según la facturación anual con tarjeta,
 // comisión por cobro = máximo(ticket × tarifa, 0,05 €), +0,03 € por
-// operación si hay integración y mínimo mensual de 29,95 € sobre las comisiones.
+// operación si hay integración, mínimo mensual de 29,95 € sobre las comisiones
+// y 10 € al mes si se quiere el abono todos los días (lunes a domingo).
 (function () {
   var caja = document.getElementById('simTarifa');
   if (!caja) return;
   var TRAMOS = JSON.parse(caja.dataset.tramos);
-  var MIN_OP = 0.05, INTEGRACION = 0.03, MIN_MES = 29.95;
+  var MIN_OP = 0.05, INTEGRACION = 0.03, MIN_MES = 29.95, ABONO_DIARIO = 10;
   var cto = caja.querySelector('[name=cto]');
   var ticket = caja.querySelector('[name=ticket]');
   var integ = caja.querySelector('[name=integracion]');
+  var diario = caja.querySelector('[name=diario]');
   var r = function (k) { return caja.querySelector('[data-r=' + k + ']'); };
   function num(el) { return parseFloat(String(el.value).replace(/\./g, '').replace(',', '.')) || 0; }
   function eur(x) { return x.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' }); }
@@ -151,7 +157,8 @@
     var porOp = Math.max(tk * tarifa, MIN_OP);
     var comisiones = porOp * ops;
     var aplicaMinimo = comisiones < MIN_MES;
-    var total = Math.max(comisiones, MIN_MES) + (integ.checked ? INTEGRACION * ops : 0);
+    var total = Math.max(comisiones, MIN_MES) + (integ.checked ? INTEGRACION * ops : 0) +
+      (diario.checked ? ABONO_DIARIO : 0);
     r('ventas').textContent = eur(ventas);
     r('ops').textContent = Math.round(ops).toLocaleString('es-ES');
     r('tarifa').textContent = pct(tarifa);
@@ -161,11 +168,13 @@
     var notas = [];
     if (tk * tarifa < MIN_OP) notas.push('Con este ticket se aplica el mínimo de 0,05 € por cobro.');
     if (aplicaMinimo) notas.push('Tus comisiones no llegan al mínimo mensual de 29,95 €, así que se aplica el mínimo.');
+    if (diario.checked) notas.push('Incluye 10 € al mes por recibir tus abonos todos los días, de lunes a domingo.');
     if (anual > TRAMOS[TRAMOS.length - 1][1]) notas.push('Con más de 1.200.000 € al año te preparamos una tarifa a medida; el cálculo usa el último tramo como referencia.');
     r('nota').textContent = notas.join(' ');
   }
   [cto, ticket].forEach(function (el) { el.addEventListener('input', pintar); });
   integ.addEventListener('change', pintar);
+  diario.addEventListener('change', pintar);
   pintar();
 })();
 

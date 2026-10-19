@@ -324,7 +324,7 @@ def inicio():
   <div class="hero-device">{dibujo_terminal()}<span class="burbuja">{ico("check")}Pago aceptado</span></div>
 </div>
 <div class="wrap"><div class="hero-stats">
-    <div><b>Día hábil siguiente</b><span>recibes el dinero de tus ventas de lunes a viernes</span></div>
+    <div><b>Día hábil siguiente</b><span>abonos de lunes a viernes, o todos los días por 10 € más al mes</span></div>
     <div><b>Wifi + 4G</b><span>si se cae el wifi, el datáfono sigue cobrando por 4G</span></div>
     <div><b>Desde 0,36 %</b><span>por cobro según tu facturación anual, mínimo 0,05 € por operación</span></div>
     <div><b>Entrega 24-48 h</b><span>24 h en las principales ciudades y 48 h en el resto</span></div>
@@ -351,6 +351,7 @@ def inicio():
       <span class="eyebrow-dark">Tu dinero, cuando lo necesitas</span>
       <h2>Lo que cobras hoy, en tu cuenta el siguiente día hábil</h2>
       <p style="color:var(--muted)">Si cobras de lunes a viernes, recibes el dinero el siguiente día hábil, sin contar fines de semana ni festivos. Y la app te avisa de cada transferencia.</p>
+      <p class="novedad"><span class="plan-tag-in">Novedad</span><b>¿Abres el fin de semana?</b> Recibe tus ventas todos los días, de lunes a domingo, por solo 10 € más al mes.</p>
       <div class="calc" id="calcLiq">
         <div class="row2">
           <div class="field"><label for="imp">Ventas con tarjeta del día (€)</label><input id="imp" name="importe" inputmode="decimal" value="850"></div>
@@ -358,6 +359,7 @@ def inicio():
             <select id="dia" name="dia"><option value="1">Lunes</option><option value="2">Martes</option><option value="3">Miércoles</option><option value="4">Jueves</option><option value="5" selected>Viernes</option><option value="6">Sábado</option><option value="0">Domingo</option></select>
           </div>
         </div>
+        <label class="consent" style="margin-top:12px"><input type="checkbox" name="diario"> <span>Abono todos los días, de lunes a domingo (+10 € al mes)</span></label>
         <p class="calc-out" data-salida aria-live="polite"></p>
         <p class="note-inline">Cálculo orientativo; no tiene en cuenta los festivos. Los plazos exactos figuran en tu contrato.</p>
       </div>
@@ -549,7 +551,7 @@ def sectores():
          ["Enlaces de pago para señales", "Propinas en pantalla", "Cobro contactless y con el móvil", "Ventas y facturas en la app"]),
         ("servicios", "maletin", "Autónomos y pymes",
          "Cobra en el local, a domicilio o a distancia, y controla todo desde el móvil.",
-         ["Datáfono portátil con 4G", "Enlaces de pago", "Dinero al siguiente día hábil", "Facturas con el desglose de cargos"]),
+         ["Datáfono portátil con 4G", "Enlaces de pago", "Dinero al siguiente día hábil (o todos los días por 10 €/mes)", "Facturas con el desglose de cargos"]),
         ("eventos", "usuarios", "Eventos y ferias",
          "Puestos sin enchufe ni wifi fiable: datáfonos con 4G integrado y batería para toda la jornada.",
          ["4G integrado", "10 horas de batería", "Cobros en segundos", "Ventas de cada puesto en tiempo real"]),
@@ -576,6 +578,7 @@ TRAMOS = [
 MIN_OPERACION = "0,05 €"
 EXTRA_INTEGRACION = "0,03 €"
 MIN_MENSUAL = "29,95 €"
+ABONO_DIARIO = "10 €"  # abono todos los días (lunes a domingo), al mes
 # Ejemplos con ticket medio de 15 €: (facturación anual, ventas/mes, tarifa, sin integración, con integración)
 EJEMPLOS = [
     ("120.000 €", "10.000,00 €", "0,60 %", "60,00 €", "80,00 €"),
@@ -625,6 +628,7 @@ def tarifas():
           ("Mínimo por operación: " + MIN_OPERACION, "Cinco céntimos, no 0,05 céntimos. Se aplica el mayor entre la comisión porcentual y 0,05 €; nunca se suman los dos."),
           ("Integración con tu TPV: +" + EXTRA_INTEGRACION + " por operación", "Solo si conectas el datáfono a tu programa de caja."),
           ("Mínimo mensual: " + MIN_MENSUAL, "Se compara con el total de comisiones del mes. Si tus comisiones lo superan, no pagas nada extra."),
+          ("Novedad · abono todos los días: +" + ABONO_DIARIO + " al mes", "Por defecto recibes tus ventas de lunes a viernes. Si las quieres también en fin de semana, de lunes a domingo, son 10 € más al mes."),
       ])}
     </div>
     <div class="tabla-wrap"><table class="comparativa">
@@ -641,7 +645,10 @@ def tarifas():
     <div class="row3">
       <div class="field"><label for="cto">Facturación anual con tarjeta (€)</label><input id="cto" name="cto" inputmode="decimal" value="300000"></div>
       <div class="field"><label for="ticket">Ticket medio (€)</label><input id="ticket" name="ticket" inputmode="decimal" value="15"></div>
-      <label class="consent sim-check"><input type="checkbox" name="integracion"> <span>Datáfono integrado con mi TPV (+0,03 € por operación)</span></label>
+      <div class="sim-opciones">
+        <label class="consent"><input type="checkbox" name="integracion"> <span>Datáfono integrado con mi TPV (+0,03 € por operación)</span></label>
+        <label class="consent"><input type="checkbox" name="diario"> <span>Abono todos los días, de lunes a domingo (+10 € al mes)</span></label>
+      </div>
     </div>
     <dl class="sim-res" aria-live="polite">
       <div><dt>Ventas al mes</dt><dd data-r="ventas">—</dd></div>
@@ -652,7 +659,7 @@ def tarifas():
       <div><dt>Porcentaje efectivo</dt><dd data-r="efectivo">—</dd></div>
     </dl>
     <p class="calc-out" data-r="nota"></p>
-    <p class="note-inline">Estimación orientativa: ventas mensuales = facturación anual ÷ 12; operaciones = ventas mensuales ÷ ticket medio. Importes antes del redondeo final de la liquidación. Condiciones sujetas a validación comercial y a contrato.</p>
+    <p class="note-inline">Estimación orientativa: ventas mensuales = facturación anual ÷ 12; operaciones = ventas mensuales ÷ ticket medio; el abono diario suma 10 € fijos al mes. Importes antes del redondeo final de la liquidación. Condiciones sujetas a validación comercial y a contrato.</p>
   </div>
 </div></section>
 
@@ -682,7 +689,7 @@ def tarifas():
         ("Alquiler por datáfono", "Incluye la conexión 4G, la asistencia técnica, la resolución de problemas y la sustitución del equipo."),
         ("Contrato de 12 meses", "Puedes rescindirlo en cualquier momento; en ese caso se aplican gastos de cancelación."),
         ("Te ayudamos con la penalización de tu proveedor actual", "Reembolso de hasta 500 € si facturas con tarjeta menos de 150.000 € al año, y de hasta 3.000 € si facturas más."),
-        ("Dinero al siguiente día hábil", "Si cobras de lunes a viernes, sin contar fines de semana ni festivos."),
+        ("Dinero al siguiente día hábil", "Abonos de lunes a viernes, sin contar fines de semana ni festivos. Si los quieres todos los días, de lunes a domingo, son 10 € más al mes."),
         ("Condiciones particulares", "Puede haber condiciones específicas según el tipo de tarjeta, el contrato o la integración."),
     ])}
   </div>
@@ -719,6 +726,7 @@ def como_funciona():
 
 PREGUNTAS = [
     ("¿Cuándo recibo el dinero de mis ventas?", "Si cobras de lunes a viernes, recibes el dinero el siguiente día hábil, sin contar fines de semana ni festivos. La app te avisa de cada transferencia."),
+    ("¿Puedo recibir el dinero también en fin de semana?", "Sí, es una novedad: por 10 € más al mes recibes tus abonos todos los días, de lunes a domingo. Si no la contratas, los abonos se hacen de lunes a viernes."),
     ("¿Cuánto cuesta?", "La comisión va del 0,60 % al 0,36 % según tu facturación anual con tarjeta, con un mínimo de 0,05 € por cobro (se aplica el mayor de los dos, nunca la suma). Si integras el datáfono con tu TPV, se añaden 0,03 € por operación. Prueba el <a href='tarifas.html#simulador'>simulador de tarifas</a> o pídenos una propuesta."),
     ("¿Qué significa el mínimo de 0,05 € por operación?", "Son cinco céntimos. En cada cobro pagas el porcentaje de tu tramo o 0,05 €, lo que sea mayor. Por ejemplo, un ticket de 10 € al 0,60 % cuesta 0,06 €; al 0,36 % costaría 0,036 €, así que se aplica el mínimo de 0,05 €."),
     ("¿Hay un pago mínimo mensual?", "Sí, de 29,95 €. Se compara con el total de comisiones del mes: si tus comisiones lo superan, no pagas nada extra."),
@@ -933,6 +941,9 @@ table.comparativa{border-collapse:collapse;width:100%;min-width:560px;font-size:
 .mapa{max-width:520px}
 section[id]{scroll-margin-top:90px}
 @media (min-width:900px){.g3-fijo{grid-template-columns:repeat(3,1fr)}}
+.novedad{background:#FFF1EA;border:1px solid #FFD2BD;border-radius:10px;padding:12px 14px;color:var(--body);font-size:15.5px}
+.plan-tag-in{display:inline-block;background:#FF7A45;color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 10px;border-radius:999px;margin-right:8px;vertical-align:1px}
+.sim-opciones{display:grid;gap:8px;padding-bottom:6px}
 
 /* Simulador de tarifas */
 .row3{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));align-items:end}
