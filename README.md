@@ -11,4 +11,4 @@ El sitio no nombra al proveedor del servicio de pago: el pie y el aviso legal in
 
 Para publicarlo con GitHub Pages: Settings → Pages → Deploy from a branch.
 
-Las condiciones comerciales que aparecen en tarifas y preguntas frecuentes (mínimo mensual, contrato de 12 meses, reembolso de penalización, abono al día hábil siguiente, entrega en 24-48 h) son las publicadas por el proveedor del servicio de pago en septiembre de 2026. Revísalas si cambian.
+Las tarifas (tramos del 0,60 % al 0,36 %, mínimo de 0,05 € por operación, +0,03 € por operación con integración y mínimo mensual de 29,95 €) proceden de la guía comercial de tarifas 2026 para Canarias. Están en `TRAMOS`, `EJEMPLOS` y las constantes de `tools/build.py`, y el simulador las repite en `assets/site.js`: si cambian, actualiza ambos sitios. El resto de condiciones (contrato de 12 meses, reembolso de penalización, abono al día hábil siguiente, entrega en 24-48 h) son las publicadas por el proveedor del servicio de pago en septiembre de 2026.

@@ -118,6 +118,57 @@
   pintar();
 })();
 
+// Simulador de tarifas: tramo según la facturación anual con tarjeta,
+// comisión por cobro = máximo(ticket × tarifa, 0,05 €), +0,03 € por
+// operación si hay integración y mínimo mensual de 29,95 € sobre las comisiones.
+(function () {
+  var caja = document.getElementById('simTarifa');
+  if (!caja) return;
+  var TRAMOS = JSON.parse(caja.dataset.tramos);
+  var MIN_OP = 0.05, INTEGRACION = 0.03, MIN_MES = 29.95;
+  var cto = caja.querySelector('[name=cto]');
+  var ticket = caja.querySelector('[name=ticket]');
+  var integ = caja.querySelector('[name=integracion]');
+  var r = function (k) { return caja.querySelector('[data-r=' + k + ']'); };
+  function num(el) { return parseFloat(String(el.value).replace(/\./g, '').replace(',', '.')) || 0; }
+  function eur(x) { return x.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' }); }
+  function eur3(x) { x = Math.floor(x * 1000 + 1e-6) / 1000; return x.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 3 }) + ' €'; }
+  function pct(x) { return (x * 100).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' %'; }
+  function pintar() {
+    var anual = num(cto), tk = num(ticket);
+    if (anual <= 0 || tk <= 0) {
+      ['ventas', 'ops', 'tarifa', 'porop', 'total', 'efectivo'].forEach(function (k) { r(k).textContent = '—'; });
+      r('nota').textContent = 'Introduce tu facturación anual y tu ticket medio.';
+      return;
+    }
+    var tramo = TRAMOS[TRAMOS.length - 1];
+    for (var i = 0; i < TRAMOS.length; i++) {
+      if (anual <= TRAMOS[i][1]) { tramo = TRAMOS[i]; break; }
+    }
+    var tarifa = tramo[2];
+    var ventas = anual / 12;
+    var ops = ventas / tk;
+    var porOp = Math.max(tk * tarifa, MIN_OP);
+    var comisiones = porOp * ops;
+    var aplicaMinimo = comisiones < MIN_MES;
+    var total = Math.max(comisiones, MIN_MES) + (integ.checked ? INTEGRACION * ops : 0);
+    r('ventas').textContent = eur(ventas);
+    r('ops').textContent = Math.round(ops).toLocaleString('es-ES');
+    r('tarifa').textContent = pct(tarifa);
+    r('porop').textContent = eur3(porOp) + (integ.checked ? ' + 0,03 €' : '');
+    r('total').textContent = eur(total);
+    r('efectivo').textContent = pct(total / ventas);
+    var notas = [];
+    if (tk * tarifa < MIN_OP) notas.push('Con este ticket se aplica el mínimo de 0,05 € por cobro.');
+    if (aplicaMinimo) notas.push('Tus comisiones no llegan al mínimo mensual de 29,95 €, así que se aplica el mínimo.');
+    if (anual > TRAMOS[TRAMOS.length - 1][1]) notas.push('Con más de 1.200.000 € al año te preparamos una tarifa a medida; el cálculo usa el último tramo como referencia.');
+    r('nota').textContent = notas.join(' ');
+  }
+  [cto, ticket].forEach(function (el) { el.addEventListener('input', pintar); });
+  integ.addEventListener('change', pintar);
+  pintar();
+})();
+
 // Formulario de contacto: compone un correo con los datos introducidos.
 // El sitio es estático, así que no hay servidor donde enviarlo.
 (function () {

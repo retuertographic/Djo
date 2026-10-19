@@ -694,3 +694,16 @@ table.comparativa{border-collapse:collapse;width:100%;min-width:560px;font-size:
 .mapa{max-width:520px}
 section[id]{scroll-margin-top:90px}
 @media (min-width:900px){.g3-fijo{grid-template-columns:repeat(3,1fr)}}
+
+/* Simulador de tarifas */
+.row3{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));align-items:end}
+.sim-check{padding-bottom:12px}
+.sim-res{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin:22px 0 6px}
+.sim-res div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.sim-res dt{font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.sim-res dd{margin:2px 0 0;font-family:var(--font-display);font-size:21px;font-weight:700;color:var(--ink)}
+.sim-res .sim-total{background:var(--green);border-color:var(--green)}
+.sim-res .sim-total dt{color:#DCD8F3}
+.sim-res .sim-total dd{color:#fff}
+.comparativa.centrada td,.comparativa.centrada th{text-align:center}
+.comparativa.centrada td:first-child,.comparativa.centrada th:first-child{text-align:left}

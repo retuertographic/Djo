@@ -7,6 +7,7 @@ Todas las páginas comparten cabecera, pie e iconos definidos aquí. Para
 cambiar el nombre comercial, los datos de contacto o el texto legal basta con
 editar el bloque CONFIG y volver a ejecutar el script.
 """
+import math
 import pathlib
 import re
 
@@ -325,7 +326,7 @@ def inicio():
 <div class="wrap"><div class="hero-stats">
     <div><b>Día hábil siguiente</b><span>recibes el dinero de tus ventas de lunes a viernes</span></div>
     <div><b>Wifi + 4G</b><span>si se cae el wifi, el datáfono sigue cobrando por 4G</span></div>
-    <div><b>10 h de batería</b><span>en el datáfono portátil, para toda la jornada</span></div>
+    <div><b>Desde 0,36 %</b><span>por cobro según tu facturación anual, mínimo 0,05 € por operación</span></div>
     <div><b>Entrega 24-48 h</b><span>24 h en las principales ciudades y 48 h en el resto</span></div>
 </div></div></div>
 
@@ -362,6 +363,7 @@ def inicio():
       </div>
     </div>
     {checks([
+        ("Del 0,60 % al 0,36 % por cobro", "Según tu facturación anual con tarjeta, con un mínimo de 0,05 € por operación. <a href='tarifas.html#simulador'>Calcula tu coste</a>."),
         ("Pagos en segundos", "El datáfono procesa cada cobro en un instante, para que la cola no crezca en hora punta."),
         ("Nunca pierdas un cobro", "4G integrado que entra en marcha si el wifi del local se cae."),
         ("Propinas en pantalla", "Una pantalla opcional antes del pago anima al cliente a dejar propina."),
@@ -408,7 +410,7 @@ def inicio():
   </div>
   <ol class="pasos">
     <li><span class="paso-n">1</span><h3>Nos cuentas tu negocio</h3><p>Facturación con tarjeta, número de datáfonos y cómo cobras hoy. Con eso te preparamos la propuesta.</p></li>
-    <li><span class="paso-n">2</span><h3>Recibes tu propuesta</h3><p>Por escrito, con las comisiones según el tipo de tarjeta y el alquiler de cada datáfono.</p></li>
+    <li><span class="paso-n">2</span><h3>Recibes tu propuesta</h3><p>Por escrito, con tu tramo de tarifa, el coste mensual estimado y el alquiler de cada datáfono.</p></li>
     <li><span class="paso-n">3</span><h3>Te llega el datáfono</h3><p>En 24 horas en las principales ciudades y en 48 horas en el resto (envíos de lunes a viernes).</p></li>
     <li><span class="paso-n">4</span><h3>Empiezas a cobrar</h3><p>Y seguimos a tu lado: asistencia técnica, resolución de problemas y sustitución del equipo.</p></li>
   </ol>
@@ -562,39 +564,139 @@ def sectores():
     pagina("sectores.html", "Sectores", "Datáfonos y TPV para restaurantes, bares, chiringuitos, comercios, peluquerías, autónomos, pymes, eventos y ferias.", html)
 
 
+# Tarifas 2026 (Canarias): tramos por facturación anual con tarjeta.
+TRAMOS = [
+    (0, 150000, "0 – 150.000 €", 0.0060, "0,60 %", "8,33 €"),
+    (150000, 250000, "150.000 – 250.000 €", 0.0049, "0,49 %", "10,20 €"),
+    (250000, 400000, "250.000 – 400.000 €", 0.0045, "0,45 %", "11,11 €"),
+    (400000, 600000, "400.000 – 600.000 €", 0.0042, "0,42 %", "11,90 €"),
+    (600000, 900000, "600.000 – 900.000 €", 0.0039, "0,39 %", "12,82 €"),
+    (900000, 1200000, "900.000 – 1.200.000 €", 0.0036, "0,36 %", "13,89 €"),
+]
+MIN_OPERACION = "0,05 €"
+EXTRA_INTEGRACION = "0,03 €"
+MIN_MENSUAL = "29,95 €"
+# Ejemplos con ticket medio de 15 €: (facturación anual, ventas/mes, tarifa, sin integración, con integración)
+EJEMPLOS = [
+    ("120.000 €", "10.000,00 €", "0,60 %", "60,00 €", "80,00 €"),
+    ("200.000 €", "16.666,67 €", "0,49 %", "81,67 €", "115,00 €"),
+    ("300.000 €", "25.000,00 €", "0,45 %", "112,50 €", "162,50 €"),
+    ("500.000 €", "41.666,67 €", "0,42 %", "175,00 €", "258,33 €"),
+    ("750.000 €", "62.500,00 €", "0,39 %", "243,75 €", "368,75 €"),
+    ("1.080.000 €", "90.000,00 €", "0,36 %", "324,00 €", "504,00 €"),
+]
+
+
+def _eur(x):
+    """0,073 € con hasta tres decimales, sin ceros sobrantes (como la tabla comercial)."""
+    s = f"{math.floor(x * 1000 + 1e-6) / 1000:.3f}".rstrip("0")
+    if s.endswith("."):
+        s += "0"
+    if len(s.split(".")[1]) < 2:
+        s += "0"
+    return s.replace(".", ",") + " €"
+
+
 def tarifas():
-    html = cabeza_pagina("Tarifas", "Precios a medida de tu negocio", "No hay una tarifa única: tu precio depende de cuánto facturas con tarjeta, del tipo de tarjeta y del número de datáfonos. Te lo damos por escrito y sin compromiso.")
+    filas_tramos = "".join(
+        f"<tr><td>{rango}</td><td><b>{pct}</b></td><td>{umbral}</td></tr>"
+        for _, _, rango, _, pct, umbral in TRAMOS
+    )
+    tickets = [2, 5, 8, 10, 15, 20, 50, 100]
+    cab_ticket = "".join(f"<th>{t[4]}</th>" for t in TRAMOS)
+    filas_ticket = "".join(
+        "<tr><td>%d €</td>%s</tr>" % (tk, "".join(
+            f"<td>{_eur(max(round(tk * t[3], 6), 0.05))}</td>" for t in TRAMOS))
+        for tk in tickets
+    )
+    filas_ej = "".join(
+        f"<tr><td>{a}</td><td>{v}</td><td>{p}</td><td><b>{s}</b></td><td>{c}</td></tr>"
+        for a, v, p, s, c in EJEMPLOS
+    )
+    datos_js = ",".join(f"[{d},{h},{r}]" for d, h, _, r, _, _ in TRAMOS)
+    html = cabeza_pagina("Tarifas", "Tarifas 2026", "Comisiones claras y fáciles de entender: un porcentaje según tu facturación anual con tarjeta, con un mínimo de 0,05 € por cobro. Sin sorpresas.")
     html += f'''<section><div class="wrap">
-  <div class="section-head"><h2>¿De qué depende tu precio?</h2><p>Tres factores definen tu propuesta personalizada.</p></div>
-  <div class="grid g3 g3-fijo">
-    {tarjeta("euro", "Tu facturación con tarjeta", "Cuanto más cobras al año con tarjeta, mejores condiciones podemos ofrecerte.")}
-    {tarjeta("tarjeta", "El tipo de tarjeta", "Débito o crédito, personal o de empresa, emitida dentro o fuera del Espacio Económico Europeo, y la red (Visa, Mastercard, Maestro o Discover). También cuenta si el pago es presencial o a distancia.")}
-    {tarjeta("terminal", "Tus datáfonos", "El alquiler se paga por cada datáfono e incluye la conexión 4G, la asistencia técnica, la resolución de problemas y la sustitución del equipo.")}
+  <div class="grid g2" style="align-items:start;gap:44px">
+    <div>
+      <span class="eyebrow-dark">6 tramos de facturación anual con tarjeta</span>
+      <h2>Cuanto más facturas, menos pagas por cobro</h2>
+      <p class="entradilla">Tu tarifa depende de lo que cobras al año con tarjeta. En cada cobro se aplica el porcentaje de tu tramo o el mínimo de {MIN_OPERACION}, el que sea mayor.</p>
+      {checks([
+          ("Mínimo por operación: " + MIN_OPERACION, "Cinco céntimos, no 0,05 céntimos. Se aplica el mayor entre la comisión porcentual y 0,05 €; nunca se suman los dos."),
+          ("Integración con tu TPV: +" + EXTRA_INTEGRACION + " por operación", "Solo si conectas el datáfono a tu programa de caja."),
+          ("Mínimo mensual: " + MIN_MENSUAL, "Se compara con el total de comisiones del mes. Si tus comisiones lo superan, no pagas nada extra."),
+      ])}
+    </div>
+    <div class="tabla-wrap"><table class="comparativa">
+      <thead><tr><th>Facturación anual con tarjeta</th><th>Tarifa</th><th>Ticket umbral aprox.</th></tr></thead>
+      <tbody>{filas_tramos}</tbody>
+    </table></div>
+  </div>
+  <p class="note-inline" style="margin-top:16px">Ticket umbral: por debajo de ese importe se aplica el mínimo de 0,05 €; por encima, el porcentaje. En el umbral, los dos importes coinciden. ¿Facturas más de 1.200.000 € al año? Te preparamos una tarifa a medida.</p>
+</div></section>
+
+<section class="alt" id="simulador"><div class="wrap">
+  <div class="section-head"><h2>Calcula tu coste mensual</h2><p>Introduce tu facturación anual con tarjeta y tu ticket medio. Calculamos tus operaciones, la comisión de cada cobro y el total del mes.</p></div>
+  <div class="card simulador" id="simTarifa" data-tramos="[{datos_js}]">
+    <div class="row3">
+      <div class="field"><label for="cto">Facturación anual con tarjeta (€)</label><input id="cto" name="cto" inputmode="decimal" value="300000"></div>
+      <div class="field"><label for="ticket">Ticket medio (€)</label><input id="ticket" name="ticket" inputmode="decimal" value="15"></div>
+      <label class="consent sim-check"><input type="checkbox" name="integracion"> <span>Datáfono integrado con mi TPV (+0,03 € por operación)</span></label>
+    </div>
+    <dl class="sim-res" aria-live="polite">
+      <div><dt>Ventas al mes</dt><dd data-r="ventas">—</dd></div>
+      <div><dt>Operaciones al mes</dt><dd data-r="ops">—</dd></div>
+      <div><dt>Tu tarifa</dt><dd data-r="tarifa">—</dd></div>
+      <div><dt>Comisión por cobro</dt><dd data-r="porop">—</dd></div>
+      <div class="sim-total"><dt>Coste mensual estimado</dt><dd data-r="total">—</dd></div>
+      <div><dt>Porcentaje efectivo</dt><dd data-r="efectivo">—</dd></div>
+    </dl>
+    <p class="calc-out" data-r="nota"></p>
+    <p class="note-inline">Estimación orientativa: ventas mensuales = facturación anual ÷ 12; operaciones = ventas mensuales ÷ ticket medio. Importes antes del redondeo final de la liquidación. Condiciones sujetas a validación comercial y a contrato.</p>
   </div>
 </div></section>
+
+<section><div class="wrap">
+  <div class="section-head"><h2>Ejemplos de coste mensual</h2><p>Todos con un ticket medio de 15 €: con ese importe no se activa el mínimo de 0,05 € en ningún tramo, así que solo se aplica el porcentaje.</p></div>
+  <div class="tabla-wrap"><table class="comparativa">
+    <thead><tr><th>Facturación anual</th><th>Ventas al mes</th><th>Tarifa</th><th>Sin integración</th><th>Con integración</th></tr></thead>
+    <tbody>{filas_ej}</tbody>
+  </table></div>
+  <p class="note-inline" style="margin-top:16px">Ejemplo: con 120.000 € al año cobras 10.000 € al mes en unas 667 operaciones de 15 €. Al 0,60 %, cada cobro cuesta 0,09 € y el mes, 60,00 €. Con integración se suman 0,03 € por operación: 80,00 €.</p>
+</div></section>
+
 <section class="alt"><div class="wrap">
+  <div class="section-head"><h2>Comisión por cobro según el importe del ticket</h2><p>Sin integración. Con tickets pequeños se aplica el mínimo de 0,05 €; a partir del umbral de tu tramo, el porcentaje.</p></div>
+  <div class="tabla-wrap"><table class="comparativa centrada">
+    <thead><tr><th>Ticket</th>{cab_ticket}</tr></thead>
+    <tbody>{filas_ticket}</tbody>
+  </table></div>
+  <p class="note-inline" style="margin-top:16px">Ejemplo: un ticket de 10 € al 0,60 % genera 0,06 € de comisión (no 0,11 €). Al 0,36 %, la comisión porcentual sería 0,036 €, así que se aplica el mínimo de 0,05 €. Importes teóricos con hasta tres decimales, antes del redondeo final.</p>
+</div></section>
+
+<section><div class="wrap">
   <div class="grid g2" style="align-items:start;gap:44px">
-    <div><h2>Condiciones claras</h2><p class="entradilla">Lo que conviene saber antes de firmar. Te lo detallamos todo en la propuesta.</p>
+    <div><h2>Otras condiciones</h2><p class="entradilla">Lo que conviene saber antes de firmar. Te lo detallamos todo en la propuesta.</p>
     <a class="btn btn-primary" href="contacto.html">{ico("mail")}Pedir mi propuesta</a></div>
     {checks([
-        ("Pago mínimo mensual de 24,95 €", "Solo se cobra si el total de comisiones del mes no llega a esa cantidad."),
+        ("Alquiler por datáfono", "Incluye la conexión 4G, la asistencia técnica, la resolución de problemas y la sustitución del equipo."),
         ("Contrato de 12 meses", "Puedes rescindirlo en cualquier momento; en ese caso se aplican gastos de cancelación."),
         ("Te ayudamos con la penalización de tu proveedor actual", "Reembolso de hasta 500 € si facturas con tarjeta menos de 150.000 € al año, y de hasta 3.000 € si facturas más."),
         ("Dinero al siguiente día hábil", "Si cobras de lunes a viernes, sin contar fines de semana ni festivos."),
-        ("Facturas con todo el desglose", "Consulta cada cargo en la app."),
+        ("Condiciones particulares", "Puede haber condiciones específicas según el tipo de tarjeta, el contrato o la integración."),
     ])}
   </div>
-  <p class="note-inline" style="margin-top:24px">Importes y condiciones según las tarifas vigentes del proveedor del servicio de pago en el momento de publicar esta página; pueden cambiar. Las condiciones que te aplican son las de tu propuesta y tu contrato.</p>
+  <p class="note-inline" style="margin-top:24px">Tarifas comerciales 2026 para Canarias. Son orientativas y no constituyen una oferta vinculante: el cálculo presupone que todas las operaciones están sujetas a la tarifa indicada. Las condiciones que te aplican son las de tu propuesta y tu contrato.</p>
 </div></section>
 ''' + panel_cta("Compara con lo que pagas hoy", "Envíanos una factura de tu datáfono actual y te decimos cuánto podrías ahorrar.")
-    pagina("tarifas.html", "Tarifas", "Precio personalizado según facturación con tarjeta, tipo de tarjeta y número de datáfonos. Mínimo mensual, contrato de 12 meses y reembolso de la penalización del proveedor anterior.", html)
+    pagina("tarifas.html", "Tarifas 2026", "Tarifas 2026 por tramos de facturación con tarjeta: del 0,60 % al 0,36 %, mínimo de 0,05 € por cobro, integración +0,03 € por operación y mínimo mensual de 29,95 €. Simulador de coste mensual.", html)
 
 
 def como_funciona():
     pasos = [
         ("Contacto", "Nos llamas, nos escribes por WhatsApp o rellenas el formulario. Te respondemos en menos de 24 horas laborables."),
         ("Análisis", "Revisamos tu facturación con tarjeta, cuántos datáfonos necesitas y, si tienes proveedor, tu última factura para compararla."),
-        ("Propuesta", "Te enviamos por escrito el equipo recomendado y el precio personalizado, con todas las condiciones."),
+        ("Propuesta", "Te enviamos por escrito el equipo recomendado, tu tramo de tarifa y el coste mensual estimado, con todas las condiciones."),
         ("Alta", "Nos pasas la documentación y tramitamos el contrato con la entidad de pago. Si cambias de proveedor, te ayudamos con el reembolso de la penalización."),
         ("Entrega", "Recibes el datáfono en 24 horas en las principales ciudades y en 48 horas en el resto (envíos de lunes a viernes)."),
         ("Acompañamiento", "Asistencia técnica, resolución de problemas y sustitución del datáfono si hace falta."),
@@ -617,8 +719,9 @@ def como_funciona():
 
 PREGUNTAS = [
     ("¿Cuándo recibo el dinero de mis ventas?", "Si cobras de lunes a viernes, recibes el dinero el siguiente día hábil, sin contar fines de semana ni festivos. La app te avisa de cada transferencia."),
-    ("¿Cuánto cuesta?", "El precio depende de tu facturación anual con tarjeta, del tipo de tarjeta (débito o crédito, personal o de empresa) y del número de datáfonos. Te preparamos una propuesta personalizada sin compromiso."),
-    ("¿Hay un pago mínimo mensual?", "Sí, de 24,95 €, y solo se cobra si el total de comisiones del mes es inferior a esa cantidad."),
+    ("¿Cuánto cuesta?", "La comisión va del 0,60 % al 0,36 % según tu facturación anual con tarjeta, con un mínimo de 0,05 € por cobro (se aplica el mayor de los dos, nunca la suma). Si integras el datáfono con tu TPV, se añaden 0,03 € por operación. Prueba el <a href='tarifas.html#simulador'>simulador de tarifas</a> o pídenos una propuesta."),
+    ("¿Qué significa el mínimo de 0,05 € por operación?", "Son cinco céntimos. En cada cobro pagas el porcentaje de tu tramo o 0,05 €, lo que sea mayor. Por ejemplo, un ticket de 10 € al 0,60 % cuesta 0,06 €; al 0,36 % costaría 0,036 €, así que se aplica el mínimo de 0,05 €."),
+    ("¿Hay un pago mínimo mensual?", "Sí, de 29,95 €. Se compara con el total de comisiones del mes: si tus comisiones lo superan, no pagas nada extra."),
     ("¿Qué incluye el alquiler del datáfono?", "Se paga por cada datáfono e incluye la conexión 4G, la asistencia técnica, la resolución de problemas y la sustitución del equipo."),
     ("¿Cuánto dura el contrato?", "12 meses, aunque puedes rescindirlo en cualquier momento. En ese caso se aplican gastos de cancelación."),
     ("Si cambio de proveedor, ¿quién paga la penalización?", "Se puede reembolsar hasta 500 € si facturas con tarjeta menos de 150.000 € al año, y hasta 3.000 € si facturas más."),
@@ -830,6 +933,19 @@ table.comparativa{border-collapse:collapse;width:100%;min-width:560px;font-size:
 .mapa{max-width:520px}
 section[id]{scroll-margin-top:90px}
 @media (min-width:900px){.g3-fijo{grid-template-columns:repeat(3,1fr)}}
+
+/* Simulador de tarifas */
+.row3{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));align-items:end}
+.sim-check{padding-bottom:12px}
+.sim-res{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin:22px 0 6px}
+.sim-res div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.sim-res dt{font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.sim-res dd{margin:2px 0 0;font-family:var(--font-display);font-size:21px;font-weight:700;color:var(--ink)}
+.sim-res .sim-total{background:var(--green);border-color:var(--green)}
+.sim-res .sim-total dt{color:#DCD8F3}
+.sim-res .sim-total dd{color:#fff}
+.comparativa.centrada td,.comparativa.centrada th{text-align:center}
+.comparativa.centrada td:first-child,.comparativa.centrada th:first-child{text-align:left}
 '''
 
 
