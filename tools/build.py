@@ -984,9 +984,67 @@ def estilos():
         encoding="utf-8")
 
 
+def llms_txt():
+    """Genera llms.txt (formato llmstxt.org): resumen del sitio para asistentes de IA."""
+    u = C["url"]
+    limpio = lambda t: re.sub(r"<[^>]+>", "", t)
+    tramos = "\n".join(f"- {rango}: {pct} por cobro" for _, _, rango, _, pct, _ in TRAMOS)
+    productos = "\n".join(f"- [{nombre}]({u}terminales.html#{ancla}): {tipo}. {lema}"
+                          for ancla, _, nombre, tipo, lema, _ in TERMINALES)
+    faq_txt = "\n".join(f"- {p} {limpio(r)}" for p, r in PREGUNTAS)
+    txt = f"""# {C["marca"]}
+
+> {C["marca"]} es un distribuidor comercial independiente de datáfonos, TPV y soluciones de cobro con tarjeta para hostelería, comercio, autónomos y pymes en Canarias. Asesora, tramita el alta y da soporte; el servicio de pago lo presta la entidad de pago autorizada que figura en el contrato de cada cliente.
+
+Datos clave:
+
+- Abono de las ventas el siguiente día hábil (de lunes a viernes). Opción de abono todos los días, de lunes a domingo, por {ABONO_DIARIO} más al mes.
+- Datáfonos con wifi y 4G automático. Entrega en 24 h en las principales ciudades y en 48 h en el resto.
+- Tarjetas aceptadas: Visa, Mastercard, Maestro y Discover, contactless y monederos móviles (Apple Pay, Google Pay).
+- Contrato de 12 meses, rescindible con gastos de cancelación; reembolso de la penalización del proveedor anterior de hasta 500 € (facturación anual con tarjeta inferior a 150.000 €) o hasta 3.000 € (superior).
+
+Tarifas 2026 (Canarias), por facturación anual con tarjeta:
+
+{tramos}
+
+- Mínimo por operación: {MIN_OPERACION} (se aplica el mayor entre el porcentaje y 0,05 €; nunca la suma).
+- Integración con TPV: +{EXTRA_INTEGRACION} por operación.
+- Mínimo mensual: {MIN_MENSUAL}, comparado con el total de comisiones del mes.
+- Más de 1.200.000 € al año: tarifa a medida.
+- Tarifas orientativas, sujetas a validación comercial y a contrato.
+
+## Productos
+
+{productos}
+
+## Páginas
+
+- [Inicio]({u}): Resumen de la oferta, calculadora de abonos y sectores.
+- [Datáfonos y TPV]({u}terminales.html): Fichas de Kairo Go, Kairo Pocket y Kairo Duo y comparativa.
+- [Soluciones]({u}soluciones.html): Reservas y colas virtuales, enlaces de pago, integración con TPV, app de gestión y VeriFactu.
+- [Sectores]({u}sectores.html): Restaurantes, bares y chiringuitos, comercio, peluquerías, autónomos y pymes, eventos y ferias.
+- [Tarifas 2026]({u}tarifas.html): Tramos, simulador de coste mensual, ejemplos y comisión por ticket.
+- [Cómo funciona]({u}como-funciona.html): Proceso de alta y documentación necesaria.
+- [Preguntas frecuentes]({u}preguntas-frecuentes.html): Abonos, precio, mínimos, contrato, entrega, tarjetas, TPV y VeriFactu.
+- [Contacto]({u}contacto.html): Formulario para pedir una propuesta, teléfono, WhatsApp y correo ({C["email"]}, {C["telefono"]}).
+
+## Preguntas frecuentes
+
+{faq_txt}
+
+## Optional
+
+- [Aviso legal]({u}aviso-legal.html)
+- [Política de privacidad]({u}politica-de-privacidad.html)
+- [Cookies]({u}cookies.html)
+- [Mapa web]({u}mapa-web.html)
+"""
+    (RAIZ / "llms.txt").write_text(txt, encoding="utf-8")
+
+
 if __name__ == "__main__":
     (RAIZ / "assets").mkdir(exist_ok=True)
     estilos()
     inicio(); terminales(); soluciones(); sectores(); tarifas(); como_funciona()
-    preguntas(); contacto(); legales(); mapa_web()
+    preguntas(); contacto(); legales(); mapa_web(); llms_txt()
     print("Sitio generado en", RAIZ)

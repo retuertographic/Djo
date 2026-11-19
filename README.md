@@ -3,6 +3,7 @@
 Sitio web estático de un distribuidor de datáfonos y soluciones de cobro: Kairo Go (datáfono rápido con 4G), Kairo Pocket (pedido y cobro en mesa), Kairo Duo (TPV + datáfono preparado para VeriFactu), reservas y colas virtuales, enlaces de pago, integración con TPV y app de gestión. Misma estructura y estilo que el sitio de Retuerto y Asociados, con paleta, tipografía, logotipo e ilustraciones propios.
 
 - `*.html` — páginas generadas: inicio, datáfonos, soluciones, sectores, tarifas, cómo funciona, preguntas frecuentes, contacto, legales, mapa web y 404.
+- `llms.txt` — resumen del sitio para asistentes de IA (formato llmstxt.org), generado por `tools/build.py`.
 - `assets/` — `styles.css`, `site.js` (menú, «volver arriba», calculadora de liquidación y formulario por correo) y `favicon.svg`.
 - `tools/build.py` — genera todas las páginas. **Los datos del distribuidor (teléfono, WhatsApp, correo, dirección, razón social, CIF) están en el bloque `CONFIG` y son provisionales**: cámbialos y ejecuta `python3 tools/build.py`.
 - `tools/base.css` — hoja de estilo de partida; el script le aplica la paleta propia.
