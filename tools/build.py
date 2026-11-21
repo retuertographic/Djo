@@ -190,7 +190,7 @@ def pie():
   </div>
   <div class="foot-bottom">
     <p class="foot-legal-text">Copyright © {C["anio"]} {C["marca"]} · {C["razon_social"]} · {C["cif"]}. {C["marca"]} actúa como distribuidor comercial independiente. Los servicios de pago los presta la entidad de pago autorizada que se indica en el contrato de cada cliente. Las marcas de tarjetas y de monederos móviles pertenecen a sus respectivos titulares.</p>
-    <p class="foot-credit">Desarrollado por Retuerto Graphic Design. Ricardo Retuerto Barrera | Spain-Germany | <a href="tel:0034922971723">0034 922 971 723</a> · <a href="tel:00493031878629">0049 30 31878629</a></p>
+    <p class="foot-credit">Desarrollado por <a href="https://retuertographicdesign.com/" target="_blank" rel="noopener">Retuerto Graphic Design</a>. Ricardo Retuerto Barrera | Spain-Germany | <a href="tel:0034922971723">0034 922 971 723</a> · <a href="tel:00493031878629">0049 30 31878629</a></p>
   </div>
 </div></footer>
 <button class="arriba" type="button" id="irArriba" hidden aria-label="Volver arriba" title="Volver arriba">{ico("arriba")}</button>
